@@ -1,13 +1,17 @@
 import { inject, injectable } from "tsyringe";
+import { Store } from "../provider";
 
 @injectable()
 export class RetrieveItemFromStoreService {
   constructor(
     @inject("Store")
-    private store: { [key: string]: any }
+    private store: Store
   ) {}
 
   execute(key: string): string | number | undefined {
-    return this.store[key];
+    const item = this.store.get(key);
+    if (item) {
+      return item.value;
+    }
   }
 }

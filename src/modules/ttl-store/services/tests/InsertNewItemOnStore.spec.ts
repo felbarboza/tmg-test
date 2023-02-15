@@ -1,13 +1,14 @@
 import "reflect-metadata";
-import { Item } from "../dtos/Item";
-import { InsertNewItemOnStoreService } from "../services/InsertNewItemOnStore.service";
+import { Item } from "../../dtos/Item";
+import { Store } from "../../provider";
+import { InsertNewItemOnStoreService } from "../InsertNewItemOnStore.service";
 
 describe("InsertItem Service", () => {
   let insertItemService: InsertNewItemOnStoreService;
-  let store: { [key: string]: any };
+  let store: Store;
 
   beforeEach(() => {
-    store = {};
+    store = new Map();
     insertItemService = new InsertNewItemOnStoreService(store);
   });
 
@@ -20,7 +21,7 @@ describe("InsertItem Service", () => {
 
     insertItemService.execute(item);
 
-    expect(store["name"]).toBe("John");
+    expect(store.get("name")?.value).toBe("John");
   });
 
   it("should be able to replace an existing item value when passing the same key", () => {
@@ -32,7 +33,7 @@ describe("InsertItem Service", () => {
 
     insertItemService.execute(item);
 
-    expect(store["name"]).toBe("John");
+    expect(store.get("name")?.value).toBe("John");
 
     const item2: Item = {
       key: "name",
@@ -42,6 +43,6 @@ describe("InsertItem Service", () => {
 
     insertItemService.execute(item2);
 
-    expect(store["name"]).toBe("Doe");
+    expect(store.get("name")?.value).toBe("Doe");
   });
 });

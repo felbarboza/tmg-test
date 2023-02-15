@@ -1,20 +1,32 @@
 import { inject, injectable } from "tsyringe";
 import { Item } from "../dtos/Item";
+import { Store } from "../provider";
 
 @injectable()
 export class InsertNewItemOnStoreService {
-	constructor(
-		@inject("Store")
-		private store: { [key: string]: any }
-	) {}
+  constructor(
+    @inject("Store")
+    private store: Store
+  ) {}
 
-	execute(item: Item) {
-		this.store[item.key] = item.value;
+  execute(item: Item) {
+    const previousItem = this.store.get(item.key);
 
-		setTimeout(() => {
-			delete this.store[item.key];
-		}, item.ttl);
+    if (previousItem && previousItem.timeoutId) {
+      clearTimeout(previousItem.timeoutId);
+    }
 
-		return item;
-	}
+    let timeoutId = undefined;
+
+    if (item.ttl) {
+      timeoutId = setTimeout(() => {
+        this.store.delete(item.key);
+      }, item.ttl);
+    }
+
+    this.store.set(item.key, {
+      value: item.value,
+      timeoutId,
+    });
+  }
 }

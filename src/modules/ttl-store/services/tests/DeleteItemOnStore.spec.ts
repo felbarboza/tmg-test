@@ -1,15 +1,16 @@
 import "reflect-metadata";
-import { Item } from "../dtos/Item";
-import { DeleteItemOnStoreService } from "../services/DeleteItemOnStore.service";
-import { InsertNewItemOnStoreService } from "../services/InsertNewItemOnStore.service";
+import { Item } from "../../dtos/Item";
+import { Store } from "../../provider";
+import { DeleteItemOnStoreService } from "../DeleteItemOnStore.service";
+import { InsertNewItemOnStoreService } from "../InsertNewItemOnStore.service";
 
 describe("DeleteItem Service", () => {
   let deleteItemService: DeleteItemOnStoreService;
   let insertItemService: InsertNewItemOnStoreService;
-  let store: { [key: string]: any };
+  let store: Store;
 
   beforeEach(() => {
-    store = {};
+    store = new Map();
     deleteItemService = new DeleteItemOnStoreService(store);
     insertItemService = new InsertNewItemOnStoreService(store);
   });
@@ -23,11 +24,11 @@ describe("DeleteItem Service", () => {
 
     insertItemService.execute(item);
 
-    expect(store["name"]).toBe("John");
+    expect(store.get("name")?.value).toBe("John");
 
     deleteItemService.execute("name");
 
-    expect(store["name"]).toBeUndefined();
+    expect(store.get("name")?.value).toBeUndefined();
   });
 
   it("should not return any error when trying to delete an item with non created key", () => {

@@ -1,20 +1,25 @@
 import "reflect-metadata";
-import { Item } from "../dtos/Item";
-import { InsertNewItemOnStoreService } from "../services/InsertNewItemOnStore.service";
-import { RetrieveItemFromStoreService } from "../services/RetrieveItemFromStore.service";
+import { Item } from "../../dtos/Item";
+import { Store } from "../../provider";
+import { InsertNewItemOnStoreService } from "../InsertNewItemOnStore.service";
+import { RetrieveItemFromStoreService } from "../RetrieveItemFromStore.service";
 
 describe("RetrieveItem Service", () => {
   let retrieveItemService: RetrieveItemFromStoreService;
-  let store: { [key: string]: any };
+  let store: Store;
 
   beforeEach(() => {
-    store = {};
+    store = new Map();
     retrieveItemService = new RetrieveItemFromStoreService(store);
   });
 
   it("should be able to retrieve an item", () => {
-    store["name"] = "John";
-    store["age"] = 12;
+    store.set("name", {
+      value: "John",
+    });
+    store.set("age", {
+      value: 12,
+    });
 
     const nameItem = retrieveItemService.execute("name");
     const ageItem = retrieveItemService.execute("age");
