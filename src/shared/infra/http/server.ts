@@ -6,7 +6,7 @@ import rateLimiter from "./middlewares/rateLimiter";
 import "@shared/containers";
 import { ApplicationError } from "@shared/errors/ApplicationError";
 
-const app = express();
+export const app = express();
 
 app.use(cors());
 app.use(rateLimiter);
@@ -29,6 +29,15 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log("It is working");
-});
+export function startServer(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const server = app.listen(3000, () => {
+      console.log("Server started on port 3000");
+      resolve();
+    });
+    server.on("error", (err) => {
+      console.error("Error starting server:", err);
+      reject(err);
+    });
+  });
+}

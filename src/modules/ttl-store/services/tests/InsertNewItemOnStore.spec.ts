@@ -16,7 +16,6 @@ describe("InsertItem Service", () => {
     const item: Item = {
       key: "name",
       value: "John",
-      ttl: 1000,
     };
 
     insertItemService.execute(item);
@@ -28,7 +27,6 @@ describe("InsertItem Service", () => {
     const item: Item = {
       key: "name",
       value: "John",
-      ttl: 1000,
     };
 
     insertItemService.execute(item);
@@ -38,7 +36,6 @@ describe("InsertItem Service", () => {
     const item2: Item = {
       key: "name",
       value: "Doe",
-      ttl: 1000,
     };
 
     insertItemService.execute(item2);

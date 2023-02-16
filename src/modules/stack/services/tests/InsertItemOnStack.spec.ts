@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { InsertItemOnStackService } from "../services/InsertItemOnStack.service";
+import { InsertItemOnStackService } from "../InsertItemOnStack.service";
 
 describe("InsertItemOnStack Service", () => {
   let stack: (number | string)[];

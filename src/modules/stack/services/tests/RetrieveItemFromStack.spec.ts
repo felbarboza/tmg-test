@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { RetrieveItemFromStackService } from "../services/RetrieveItemFromStack.service";
+import { RetrieveItemFromStackService } from "../RetrieveItemFromStack.service";
 
 describe("RetrieveItemFromStack Service", () => {
   let stack: (number | string)[];
