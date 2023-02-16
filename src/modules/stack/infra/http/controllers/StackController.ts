@@ -2,9 +2,19 @@ import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { RetrieveItemFromStackService } from "@modules/stack/services/RetrieveItemFromStack.service";
 import { InsertItemOnStackService } from "@modules/stack/services/InsertItemOnStack.service";
+import { JoiValidationError } from "@shared/errors/JoiItemValidationError";
+import insertItemSchema from "../validators/insertItem.validator";
 
 export class StackController {
-  public async insertItem(req: Request, res: Response): Promise<Response> {
+  public insertItem(req: Request, res: Response): Response {
+    const { error } = insertItemSchema.validate(req.body);
+
+    if (error) {
+      throw new JoiValidationError(
+        `Validation error: ${error.details.map((x) => x.message).join(", ")}`
+      );
+    }
+
     const { value } = req.body;
 
     const insertItemService = container.resolve(InsertItemOnStackService);
@@ -14,7 +24,7 @@ export class StackController {
     return res.status(201).json();
   }
 
-  public async retrieveItem(req: Request, res: Response): Promise<Response> {
+  public retrieveItem(req: Request, res: Response): Response {
     const retrieveItemService = container.resolve(RetrieveItemFromStackService);
 
     const item = retrieveItemService.execute();

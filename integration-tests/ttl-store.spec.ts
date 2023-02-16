@@ -143,7 +143,7 @@ describe("Test TTL Store API endpoints", () => {
     expect(getResponseAfterChangingValue.body).toStrictEqual({ value: value2 });
   });
 
-  it("should be able to change an item value and also it's ttl ignoring the previous ttl ", async () => {
+  it("should be able to change an item value and also it's ttl ignoring the previous ttl", async () => {
     const key = "name";
     const value = "John";
     const value2 = "Doe";

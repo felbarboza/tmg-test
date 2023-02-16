@@ -7,78 +7,179 @@
   },
   "host": "localhost:3000",
   "basePath": "/",
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "paths": {
-    "/api-docs": {
-      "get": {
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
     "/stack/": {
       "get": {
-        "description": "",
-        "parameters": [],
-        "responses": {}
+        "summary": "Retrieve the value from the top of the stack",
+        "description": "Retrieves the value from the top of the stack.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "The value was successfully retrieved.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "The value from the top of the stack."
+                }
+              }
+            }
+          }
+        }
       },
       "post": {
-        "description": "",
-        "parameters": [],
+        "summary": "Store a new value on the top of the stack",
+        "description": "Stores a  new value on the top of the stack.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "The value to be stacked",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "The value, which must be a string or number"
+                }
+              },
+              "required": ["value"]
+            }
+          }
+        ],
         "responses": {
+          "201": {
+            "description": "The value pair was successfully stacked."
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad request - the request was invalid or could not be fulfilled.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Validation error: \"value\" must be a number or string"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "error"
+                }
+              }
+            }
           }
         }
       }
     },
     "/ttl-store/": {
       "post": {
-        "description": "",
-        "parameters": [],
-        "responses": {}
+        "summary": "Store a key-value pair with an optional time-to-live (TTL)",
+        "description": "Stores a key-value pair in the TTL store, optionally expiring the value after a specified time-to-live (TTL) period.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "The key-value pair to be stored",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "maxLength": 255,
+                  "description": "The key, with a maximum length of 255 characters"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The value, which must be a string or number"
+                },
+                "ttl": {
+                  "type": "integer",
+                  "description": "The time-to-live (TTL) of the value, in ms (maximum 60,000 ms = 60s)",
+                  "minimum": 1,
+                  "maximum": 60000
+                }
+              },
+              "required": ["key", "value"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The key-value pair was successfully stored."
+          },
+          "400": {
+            "description": "Bad request - the request was invalid or could not be fulfilled.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Validation error: \"ttl\" must be less than or equal to 60000"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "error"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/ttl-store/{key}": {
       "get": {
-        "description": "",
+        "summary": "Retrieve the value of a key",
+        "description": "Retrieves the value associated with the specified key.",
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "key",
             "in": "path",
+            "description": "The key whose value should be retrieved",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "The value was successfully retrieved.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "The value associated with the specified key."
+                }
+              }
+            }
+          }
+        }
       },
       "delete": {
-        "description": "",
+        "summary": "Delete the value of a key",
+        "description": "Deletes the value associated with the specified key.",
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "key",
             "in": "path",
+            "description": "The key whose value should be deleted",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           }
         ],
-        "responses": {}
-      }
-    },
-    "/": {
-      "get": {
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      },
-      "post": {
-        "description": "",
-        "parameters": [],
         "responses": {
-          "400": {
-            "description": "Bad Request"
+          "200": {
+            "description": "The value was successfully deleted."
           }
         }
       }

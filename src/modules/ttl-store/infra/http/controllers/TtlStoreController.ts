@@ -1,8 +1,8 @@
 import { Item } from "@modules/ttl-store/dtos/Item";
-import { JoiValidationError } from "@modules/ttl-store/errors/JoiItemValidationError";
 import { DeleteItemOnStoreService } from "@modules/ttl-store/services/DeleteItemOnStore.service";
 import { InsertNewItemOnStoreService } from "@modules/ttl-store/services/InsertNewItemOnStore.service";
 import { RetrieveItemFromStoreService } from "@modules/ttl-store/services/RetrieveItemFromStore.service";
+import { JoiValidationError } from "@shared/errors/JoiItemValidationError";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 import insertItemSchema from "../validators/insertItem.validator";

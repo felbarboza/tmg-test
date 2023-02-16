@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import routes from "./routes";
 import cors from "cors";
 import rateLimiter from "./middlewares/rateLimiter";
