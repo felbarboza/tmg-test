@@ -45,6 +45,16 @@ There are several approaches on how to handle the ttl, in a real world applicati
 
 In this case, to manage the in-memory ttl I used the built-in setTimeout functions of NodeJS, letting the event-loop to handle the deletion of the key-values. Also needed to implement a way to remove those timeouts. So whenever a new item is inserted in the store, if it had a ttl, the service clears the timeout from the event-loop with the built-in clearTimeout function.
 
+In a bigger application that uses redis for instance, it would be better to do a passive and active way of deleting the values with expired ttl.
+
+Active way: Using a CRON job to pass through the database searching for expired values.
+
+Passive way: Whenever a request to retrieve the value came, verify if the ttl has expired.
+
+With this implementation the number of queries will be reduced, therefore the project would be more scalable.
+
+Also, whenever a new item is inserted it would be necessary to do an upsert on the database, to make sure that there is only one value to a certain key.
+
 ### Validation
 
 I used Joi for validation to manage each route that received a parameter, both in path or body.
